@@ -9,6 +9,8 @@
 #                      IMPORTS                       #
 # ================================================== #
 
+from __future__ import generator_stop
+
 from collections import OrderedDict as OrderedDict, deque
 from ioflo.aid import classing
 from ioflo.aid import getConsole
@@ -16,7 +18,6 @@ from ioflo.aid import lodict
 from ioflo.aid import timing
 from ioflo.aio.http import httping
 from ioflo.aid.sixing import *
-from __future__ import generator_stop
 from .. import reputationing
 from ..db import dbing
 from ..help import helping
@@ -117,6 +118,7 @@ class ReputationResource:
 
 def loadEnds(app, store):
     reputation = ReputationResource()
+    app.add_route('{}/'.format(BASE_PATH), reputation)
     app.add_route('{}/{{reputee}}'.format(BASE_PATH), reputation)
 
 # ================================================== #

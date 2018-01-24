@@ -9,6 +9,8 @@
 #                      IMPORTS                       #
 # ================================================== #
 
+from __future__ import generator_stop
+
 from glob import glob
 from os.path import basename
 from os.path import dirname
@@ -19,7 +21,6 @@ from setuptools import Extension
 from setuptools import find_packages
 from setuptools import setup
 from setuptools.command.build_ext import build_ext
-from __future__ import generator_stop
 
 import sys
 import io
@@ -106,7 +107,7 @@ setup(
     ],
     install_requires=[
         'click', 'falcon>=1.2', 'ioflo>=1.6.8', 'libnacl>=1.5.1',
-        'ujson>=3.11.1', 'pytest-falcon>=0.4.2', 'arrow>=0.10.0',
+        'ujson>=1.35', 'pytest-falcon>=0.4.2', 'arrow>=0.10.0',
     ],
     extras_require={
     },
@@ -116,7 +117,7 @@ setup(
     entry_points={
         'console_scripts': [
             'reputation = reputation.cli:main',
-            'reputation = reputation.reputationd:main',
+            'reputationd = reputation.reputationd:main',
         ]
     },
     cmdclass={'build_ext': optional_build_ext},

@@ -9,8 +9,9 @@
 #                      IMPORTS                       #
 # ================================================== #
 
-from ioflo.aid import getConsole
 from __future__ import generator_stop
+
+from ioflo.aid import getConsole
 from ..db import dbing
 
 import os
@@ -107,9 +108,14 @@ def getClarity(clarity_list):
 
 # ============================================= #
 
-def getClout(self, reach, clarity):
-    reach_weight = reach[1]/(clarity[1] + reach[1])
-    clarity_weight = clarity[1]/(clarity[1] + reach[1])
+def getClout(reach, clarity):
+    if clarity[1] + reach[1] != 0:
+        reach_weight = reach[1]/(clarity[1] + reach[1])
+        clarity_weight = clarity[1] / (clarity[1] + reach[1])
+    else:
+        reach_weight = 0
+        clarity_weight = 0
+
     normalized_weight = (clarity_weight*clarity[0]) + (reach_weight*reach[0])
     score = normalized_weight/10
     confidence = min([clarity[1], reach[1]])
@@ -118,7 +124,7 @@ def getClout(self, reach, clarity):
 
 # ============================================= #
 
-def sFunction(self, a, b, x):
+def sFunction(a, b, x):
     if x <= a:
         return 0
     elif a <= x <= ((a+b)/2):

@@ -9,11 +9,12 @@
 #                      IMPORTS                       #
 # ================================================== #
 
+from __future__ import absolute_import, print_function, unicode_literals
+
 from os.path import abspath
 from os.path import dirname
 from os.path import exists
 from os.path import join
-from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import sys

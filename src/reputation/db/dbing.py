@@ -9,8 +9,9 @@
 #                      IMPORTS                       #
 # ================================================== #
 
-from collections import OrderedDict as OrderedDict, deque
 from __future__ import generator_stop
+
+from collections import OrderedDict as OrderedDict, deque
 from ioflo.aid import getConsole
 from ..help.helping import setupTmpBaseDir
 from ..reputationing import ReputationError
@@ -151,11 +152,10 @@ def getEntries(dbn='core', env=None):
         with txn.cursor() as cursor:
             if cursor.first():
                 while True:
-                    key = cursor.key.decode()
                     value = cursor.value().decode()
 
                     try:
-                        dat = json.loads(value, object_pairs_hook=OrderedDict)
+                        dat = json.loads(value)
                     except ValueError:
                         if cursor.next():
                             continue
@@ -163,6 +163,9 @@ def getEntries(dbn='core', env=None):
                             break
 
                     entries.append(dat)
+
+                    if not cursor.next():
+                        break
 
     return entries
 

@@ -9,6 +9,7 @@
 #                      IMPORTS                       #
 # ================================================== #
 
+from __future__ import generator_stop
 
 from collections import OrderedDict as ODict, deque
 from ioflo.aid import getConsole
@@ -16,7 +17,6 @@ from ioflo.aid import timing
 from ioflo.aid.sixing import *
 from ..help.helping import setupTmpBaseDir
 from ..db import dbing
-from __future__ import generator_stop
 
 import datetime
 import enum

@@ -9,6 +9,8 @@
 #                      IMPORTS                       #
 # ================================================== #
 
+from __future__ import generator_stop
+
 from collections import deque
 from ioflo.aid import getConsole
 from ioflo.aid import odict
@@ -21,7 +23,6 @@ from ..db import dbing
 from ..end import ending
 from ..help import helping
 from ..prime import priming
-from __future__ import generator_stop
 
 import falcon
 import os
@@ -42,7 +43,7 @@ console = getConsole()
 #                     FUNCTIONS                      #
 # ================================================== #
 
-@doify('ReputationServerOpen', ioinits=odict(value="",
+@doify('ReputationServerOpen', ioinits=odict(valet="",
                                              port=odict(ival=8080),
                                              dbDirPath="",
                                              test="",
