@@ -16,7 +16,7 @@ import ioflo.app.run
 # ================================================== #
 
 def main():
-    from src.reputation import __version__
+    from reputation import __version__
     args = ioflo.app.run.parseArgs(version=__version__)
 
     ioflo.app.run.run(name=args.name,
