@@ -3,6 +3,8 @@ house main
         frame startup
             print Starting Server
             bid start server
+            print Starting Updater
+            bid start updater
 
     init main.server.test to False
     init main.server.preload to True
@@ -13,3 +15,6 @@ house main
             do reputation server service
             do reputation server close at exit
 
+    framer updater be inactive via .main.updater at 1.0
+        frame updater
+            do reputation process reputation

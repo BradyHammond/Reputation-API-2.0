@@ -9,7 +9,7 @@
 #                      IMPORTS                       #
 # ================================================== #
 
-from src.reputation.cli import main
+from reputation.cli import main
 
 # ================================================== #
 #                        MAIN                        #

@@ -3,15 +3,14 @@
 # ================================================== #
 # Author: Brady Hammond                              #
 # Created: 01/21/2017                                #
-# Last Edited: N/A                                   #
-# Last Edited By: N/A                                #
+# Last Edited: 02/02/2018                            #
+# Last Edited By: Brady Hammond                      #
 # ================================================== #
 #                      IMPORTS                       #
 # ================================================== #
 
 from __future__ import generator_stop
 
-from collections import OrderedDict as OrderedDict, deque
 from ioflo.aid import getConsole
 from ..help.helping import setupTmpBaseDir
 from ..reputationing import ReputationError
@@ -75,7 +74,9 @@ def setupDbEnv(baseDirPath=None):
 
     gDbEnv = lmdb.open(gDbDirPath, max_dbs=MAX_DB_COUNT)
 
-    gDbEnv.open_db(b'core')
+    gDbEnv.open_db(b'raw')
+    gDbEnv.open_db(b'unprocessed')
+    gDbEnv.open_db(b'reputation')
 
     return gDbEnv
 
@@ -89,7 +90,7 @@ def setupTestDbEnv():
 
 # ================================================== #
 
-def putEntry(key, ser, dbn="core", env=None):
+def putEntry(key, ser, dbn="raw", env=None):
     global gDbEnv
 
     if env is None:
@@ -111,7 +112,7 @@ def putEntry(key, ser, dbn="core", env=None):
 
 # ================================================== #
 
-def getEntry(key, dbn='core', env=None):
+def getEntry(key, dbn='raw', env=None):
     global gDbEnv
 
     if env is None:
@@ -129,7 +130,7 @@ def getEntry(key, dbn='core', env=None):
         ser = serb.decode("utf-8")
 
         try:
-            dat = json.loads(ser, object_pairs_hook=OrderedDict)
+            dat = json.loads(ser)
         except ValueError as exception:
             raise DatabaseError("Resource failed desereialization. {}".format(exception))
 
@@ -137,7 +138,7 @@ def getEntry(key, dbn='core', env=None):
 
 # ================================================== #
 
-def getEntries(dbn='core', env=None):
+def getEntries(dbn='raw', env=None):
     global gDbEnv
 
     if env is None:
@@ -171,7 +172,72 @@ def getEntries(dbn='core', env=None):
 
 # ================================================== #
 
-def preloadTestDbs(dbn="core"):
+def getEntryKeys(dbn='raw', env=None):
+    global gDbEnv
+
+    if env is None:
+        env = gDbEnv
+
+    if env is None:
+        raise DatabaseError("Database environment is not set up.")
+
+    entries = []
+    subDb = gDbEnv.open_db(dbn.encode("utf-8"), dupsort=True)
+    with gDbEnv.begin(db=subDb) as txn:
+        with txn.cursor() as cursor:
+            if cursor.first():
+                while True:
+                    value = cursor.key()
+                    entries.append(value)
+
+                    if not cursor.next():
+                        break
+
+    return entries
+
+# ================================================== #
+
+def deleteEntry(key, dbn='unprocessed', env=None):
+    global gDbEnv
+
+    if env is None:
+        env = gDbEnv
+
+    if env is None:
+        raise DatabaseError("Database environment is not set up.")
+
+    subDb = gDbEnv.open_db(dbn.encode("utf-8"), dupsort=True)
+    with gDbEnv.begin(db=subDb, write=True) as txn:
+        entry = txn.delete(key)
+        if entry is None:
+            raise DatabaseError("Entry could not be deleted")
+
+    return entry
+
+# ================================================== #
+
+def deleteEntries(dbn='unprocessed', env=None):
+    global gDbEnv
+
+    if env is None:
+        env = gDbEnv
+
+    if env is None:
+        raise DatabaseError("Database environment is not set up.")
+
+    success = False
+    entries = getEntryKeys(dbn=dbn, env=env)
+
+    for entry in entries:
+        result = deleteEntry(key=entry, dbn=dbn, env=env)
+        if result:
+            success = True
+
+    return success
+
+# ================================================== #
+
+def preloadTestDbs(dbn="raw"):
     pass
 
 # ================================================== #

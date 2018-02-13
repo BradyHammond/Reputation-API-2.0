@@ -63,10 +63,9 @@ def cleanupBaseDir(baseDirPath):
 
 # ================================================== #
 
-def getAll(reputee):
+def getAll(reputee, entries):
     reach_list = []
     clarity_list = []
-    entries = dbing.getEntries()
 
     for entry in entries:
         if entry['reputee'] == reputee:

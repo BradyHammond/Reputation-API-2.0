@@ -1,5 +1,5 @@
 # ================================================== #
-#                   REPUTATIONING                    #
+#                  TEST REPUTATION                   #
 # ================================================== #
 # Author: Brady Hammond                              #
 # Created: 01/21/2017                                #
@@ -9,24 +9,19 @@
 #                      IMPORTS                       #
 # ================================================== #
 
-from __future__ import generator_stop
-
-import sys
+from click.testing import CliRunner
+from reputation.cli import main
 
 # ================================================== #
-#                  CLASS DEFINITIONS                 #
+#                        MAIN                        #
 # ================================================== #
 
-class ReputationError(Exception):
-    """
-    Base class for reputation exception
-    """
-# ================================================== #
+def test_main():
+    runner = CliRunner()
+    result = runner.invoke(main, [])
 
-class ValidationError(ReputationError):
-    """
-    Class for validation related errors
-    """
+    assert result.output == '()\n'
+    assert result.exit_code == 0
 
 # ================================================== #
 #                        EOF                         #
